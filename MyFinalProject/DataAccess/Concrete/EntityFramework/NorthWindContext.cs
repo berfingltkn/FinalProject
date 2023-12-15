@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Entities.Concrete;
+using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,16 @@ namespace DataAccess.Concrete.EntityFramework
             //Bu işlemlerden sonra hangi nesnenin hangi nesneye denk geldiğini de belirtmemiz gerekiyor.
             //bunun içinde DbSet<> kullanırız.
         }
-            public DbSet<Product> Products { get; set; }//Product nesnesini dbset deki Products ile bağladık.
-        public DbSet<Category> Customers { get; set; }
+        public DbSet<Product> Products { get; set; }//Product nesnesini dbset deki Products ile bağladık.
+        public DbSet<Customer> Customers { get; set; }
 
-       }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
+    }
 }
 
 

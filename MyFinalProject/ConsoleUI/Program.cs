@@ -13,18 +13,41 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            ProductManager productManager = new ProductManager(new EfProductDal());
+            //ProductTest();
+            //CategoryTest(); Test etmek için yazdıklarımızı metotlaştırmak için yazdıklarımıza sağ tık yapıp hızlı eylemler ve yeniden düzenlemeye basıp yöntemi ayıkla dersek metotlaştırmış oluruz. 
 
-            foreach(var product in productManager.GetByUnitPrice(40,100))
-            {
-                Console.WriteLine(product.ProductName);
-
-                //LINQ - Class - Methods - Encapsulation
-                // Collections - Generic - Constructer - Inheritanca
-                // Interface - Polymorphism - AbstractClass 
-                // Katmanlar
-
-            }
         }
+
+        //    private static void CategoryTest()
+        //    {
+        //        CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
+        //        foreach (var category in categoryManager.GetAll())
+        //        {
+        //            Console.WriteLine(category.CategoryName);
+        //        }
+        //    }
+
+        //    private static void ProductTest()
+        //    {
+        //        ProductManager productManager = new ProductManager(new EfProductDal());
+
+        //        var result = productManager.GetProductDetails();
+        //        if (result.Success == true)
+        //        {
+        //            foreach (var product in productManager.GetProductDetails().Data)
+        //            {
+        //                Console.WriteLine(product.ProductName + "/" + product.CategoryName);
+
+
+        //            }
+
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine(result.Message);
+        //        }
+
+        //    }
+        //}
     }
 }

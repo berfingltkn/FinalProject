@@ -1,5 +1,7 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,63 +12,35 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfProductDal : IProductDal
+    public class EfProductDal : EfEntityRepositoryBase<Product, NorthWindContext>, IProductDal
     {
-        public void Add(Product entity)
-        {
-            using (NorthWindContext context=new NorthWindContext())
-            {
-                //addedEntity-> eklenen varlık
-                var addedEntity = context.Entry(entity);// veri kaynağından gönderdiğimiz productta bir tane nesneyi eşleştir.
-                addedEntity.State = EntityState.Added;//yakalanan referans ı ekle
-                context.SaveChanges();//değişiklikleri kaydet
-            }
-        }
 
-        public void Delete(Product entity)
-        {
-            using (NorthWindContext context=new NorthWindContext())
-            {
-                var deleteEntity = context.Entry(entity);
-                deleteEntity.State = EntityState.Deleted;
-                context.SaveChanges();
-            }
-            
-        }
-
-        public Product Get(Expression<Func<Product, bool>> filter)
-        {
-           using(NorthWindContext context=new NorthWindContext())
-            {
-                return context.Set<Product>().SingleOrDefault(filter);
-                //bu yapı tek bir data getirir.
-            }
-        }
-
-        public List<Product> GetAll(Expression<Func<Product, bool>> filter = null)
+        //EfEntityrepositoryBase de IProductDal ın istediği imzalar bulunuyor
+        //Bu şekilde yapınca IProductDal da bulunan metodları burada çağırmak zorunda kalmıyoruz.
+        //Peki IProductDal a neden ihtiyac var, yazmasak olur mu? -> Şu an EntityFramework kullanılıyor
+        //fakat belki ilerleyen zamanlarda farklı bir teknolojiye geçmemiz gerekir,
+        //kodun değişebilir olması için bu gereklidir. 
+        public List<ProductDetailDto> GetProductDetails()
         {
             using(NorthWindContext context=new NorthWindContext())
             {
-                //eger filtre verilmemişse db de ilgili tablodaki tüm datayı getirsin
-                // filtre vermişse o filtreye uygum dataları getir.
+                //sql de yaptığımız joinlerin linq karşılığı
+                  var result=from p in context.Products//products a p de,
+                  join c in context.Categories//categoriye c de
+                  on p.CategoryID equals c.CategoryID//products ile categories i join yap eşittir yerine equals kullanılır.
+                  select new ProductDetailDto { 
+                      ProductId=p.ProductID,
+                      ProductName=p.ProductName,
+                      CategoryName=c.CategoryName,
+                      UnitInStock=p.UnitsInStock
+                  };
+                return result.ToList();
+                //sonucu şu kolonlara uydurarak ver 
 
-                return filter == null ? context.Set<Product>().ToList() : context.Set<Product>().Where(filter).ToList();
-                //db deki tüm product verilerini listeler
-                //context.Set<Product>(): Bu ifade, "context" nesnesi üzerinden "Product" varlık kümesini temsil eden bir sorgu oluşturmak için kullanılır.
-                //"Set<T>()" yöntemi, belirli bir veri türü için bir varlık kümesi döndürür.
-                // iki noktadan öncesi sağlanmazsa sonrasını çalıştırır. 
 
-            }
-        }
-
-        public void Update(Product entity)
-        {
-            using(NorthWindContext context=new NorthWindContext())
-            {
-                var updateEntity = context.Entry(entity);
-                updateEntity.State = EntityState.Modified;
-                context.SaveChanges();
-            }
+                  
+                  
+                  }
         }
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.DataAccess;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace DataAccess.Abstract
 {
@@ -14,5 +16,9 @@ namespace DataAccess.Abstract
 
         //Class ı public yapmayı unutmuyoruz.  
 
-        }
+        //Product için join yapısı
+        List<ProductDetailDto> GetProductDetails();
+    }
 }
+
+//code refactoring -> kodun iyileştirilmesi
